@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Lenguoides - Investigación</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        .scene-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 70%);
+        }
+
+        /* Investigador principal */
+        .investigator {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 400px;
+            z-index: 10;
+        }
+
+        .investigator-figure {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2c2c54 0%, #1a1a2e 50%, #0f0f23 100%);
+            clip-path: polygon(30% 0%, 70% 0%, 85% 30%, 80% 70%, 75% 100%, 25% 100%, 20% 70%, 15% 30%);
+            position: relative;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        .investigator-face {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 80px;
+            background: radial-gradient(circle, #d4a574 30%, #8b6f47 70%);
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .pointing-arm {
+            position: absolute;
+            top: 40%;
+            right: -20px;
+            width: 80px;
+            height: 15px;
+            background: #2c2c54;
+            transform-origin: left center;
+            animation: point 2s ease-in-out infinite;
+            border-radius: 10px;
+        }
+
+        /* Pantallas VHS */
+        .monitor {
+            position: absolute;
+            background: #1a1a1a;
+            border: 3px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .monitor-1 {
+            top: 10%;
+            left: 5%;
+            width: 200px;
+            height: 150px;
+            animation: flicker 4s infinite;
+        }
+
+        .monitor-2 {
+            top: 20%;
+            right: 8%;
+            width: 180px;
+            height: 120px;
+            animation: flicker 3s infinite 1s;
+        }
+
+        .monitor-3 {
+            bottom: 15%;
+            left: 8%;
+            width: 160px;
+            height: 100px;
+            animation: flicker 5s infinite 2s;
+        }
+
+        .vhs-static {
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 255, 255, 0.03) 2px,
+                rgba(255, 255, 255, 0.03) 4px
+            );
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vhs-static::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: scan 2s linear infinite;
+        }
+
+        /* Jeroglíficos flotantes */
+        .hieroglyph {
+            position: absolute;
+            color: #00ff88;
+            font-size: 24px;
+            text-shadow: 0 0 10px currentColor;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+            font-family: 'Arial Unicode MS', sans-serif;
+        }
+
+        .hieroglyph:nth-child(odd) {
+            color: #ff6b35;
+            animation-delay: -2s;
+        }
+
+        .hieroglyph:nth-child(3n) {
+            color: #4ecdc4;
+            animation-delay: -4s;
+        }
+
+        /* Texto principal */
+        .main-text {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            padding: 20px;
+            color: #00ff88;
+            font-size: 14px;
+            line-height: 1.6;
+            text-shadow: 0 0 5px currentColor;
+            animation: textGlow 3s ease-in-out infinite;
+            z-index: 15;
+        }
+
+        /* Cables y equipos */
+        .cable {
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(45deg, #333, #555);
+            border-radius: 2px;
+        }
+
+        .cable-1 {
+            top: 30%;
+            left: 15%;
+            height: 200px;
+            transform: rotate(15deg);
+        }
+
+        .cable-2 {
+            top: 40%;
+            right: 20%;
+            height: 150px;
+            transform: rotate(-25deg);
+        }
+
+        /* Partículas de polvo */
+        .dust-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: dustFloat 8s linear infinite;
+        }
+
+        /* Luces ambientales */
+        .ambient-light {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.2) 0%, transparent 70%);
+            animation: ambientPulse 4s ease-in-out infinite;
+        }
+
+        .light-1 {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .light-2 {
+            top: 60%;
+            right: 15%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.2) 0%, transparent 70%);
+            animation-delay: -2s;
+        }
+
+        /* Animaciones */
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes point {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.3; }
+            75% { opacity: 1; }
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+            33% { transform: translateY(-20px) rotate(5deg); opacity: 1; }
+            66% { transform: translateY(-10px) rotate(-3deg); opacity: 0.6; }
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 5px currentColor; }
+            50% { text-shadow: 0 0 15px currentColor, 0 0 25px currentColor; }
+        }
+
+        @keyframes dustFloat {
+            0% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20px) translateX(50px); opacity: 0; }
+        }
+
+        @keyframes ambientPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        /* Fragmentos de texto en pantallas */
+        .screen-text {
+            position: absolute;
+            color: #00ff88;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            animation: decode 8s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes decode {
+            0% { opacity: 0; transform: translateX(-20px); }
+            20% { opacity: 1; transform: translateX(0); }
+            80% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(20px); }
+        }
+
+        /* Efectos interactivos */
+        .scene-container:hover .hieroglyph {
+            animation-duration: 3s;
+        }
+
+        .scene-container:hover .investigator-figure {
+            box-shadow: 0 0 30px rgba(212, 165, 116, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <main class="scene-container">
+        <!-- Luces ambientales -->
+        <div class="ambient-light light-1"></div>
+        <div class="ambient-light light-2"></div>
+
+        <!-- Investigador principal -->
+        <div class="investigator">
+            <div class="investigator-figure">
+                <div class="investigator-face"></div>
+                <div class="pointing-arm"></div>
+            </div>
+        </div>
+
+        <!-- Monitores VHS -->
+        <div class="monitor monitor-1">
+            <div class="vhs-static"></div>
+            <div class="screen-text" style="top: 20%; left: 10%;">SIGNAL_001</div>
+            <div class="screen-text" style="top: 60%; left: 15%; animation-delay: -2s;">DECRYPT...</div>
+        </div>
+
+        <div class="monitor monitor-2">
+            <div class="vhs-static"></div>
+            <div class="screen-text" style="top: 30%; left: 20%; animation-delay: -4s;">LENGUOID_DATA</div>
+            <div class="screen-text" style="top: 70%; left: 10%; animation-delay: -1s;">PATTERN_FOUND</div>
+        </div>
+
+        <div class="monitor monitor-3">
+            <div class="vhs-static"></div>
+            <div class="screen-text" style="top: 40%; left: 25%; animation-delay: -3s;">FRAGMENT_07</div>
+        </div>
+
+        <!-- Cables -->
+        <div class="cable cable-1"></div>
+        <div class="cable cable-2"></div>
+
+        <!-- Jeroglíficos flotantes -->
+        <div class="hieroglyph" style="top: 15%; left: 30%;">𓂀</div>
+        <div class="hieroglyph" style="top: 25%; right: 25%;">𓈖</div>
+        <div class="hieroglyph" style="top: 35%; left: 60%;">𓊪</div>
+        <div class="hieroglyph" style="top: 45%; left: 20%;">𓋴</div>
+        <div class="hieroglyph" style="top: 55%; right: 35%;">𓌻</div>
+        <div class="hieroglyph" style="top: 65%; left: 45%;">𓍯</div>
+        <div class="hieroglyph" style="top: 30%; left: 80%;">𓎡</div>
+        <div class="hieroglyph" style="top: 50%; right: 60%;">𓏏</div>
+
+        <!-- Partículas de polvo -->
+        <div class="dust-particle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="dust-particle" style="top: 40%; left: 30%; animation-delay: -2s;"></div>
+        <div class="dust-particle" style="top: 60%; left: 70%; animation-delay: -4s;"></div>
+        <div class="dust-particle" style="top: 80%; left: 50%; animation-delay: -6s;"></div>
+        <div class="dust-particle" style="top: 30%; right: 20%; animation-delay: -1s;"></div>
+        <div class="dust-particle" style="top: 70%; right: 40%; animation-delay: -3s;"></div>
+
+        <!-- Texto principal -->
+        <div class="main-text">
+            <strong>Por eso, tu tarea es clara:</strong> descifrar estas señales, seguir su patrón, descubrir lo que quieren mostrarnos. No es solo un código, no es solo un puzzle: <em>es la clave para conocer la verdad detrás de los Lenguoides</em> y los fragmentos que logramos recuperar.
+            <br><br>
+            Cada símbolo que logres interpretar nos acerca un poco más a comprender los secretos que llevan siglos ocultos, y cada descubrimiento podría cambiar la forma en que vemos lo que nos rodea.
+        </div>
+    </main>
+
+    <script>
+        // Crear más partículas de polvo dinámicamente
+        function createDustParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'dust-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            document.querySelector('.scene-container').appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 10000);
+        }
+
+        // Generar partículas cada 3 segundos
+        setInterval(createDustParticle, 3000);
+
+        // Efecto de interferencia en monitores
+        function addInterference() {
+            const monitors = document.querySelectorAll('.vhs-static');
+            monitors.forEach(monitor => {
+                if (Math.random() < 0.3) {
+                    monitor.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg)';
+                    setTimeout(() => {
+                        monitor.style.filter = 'none';
+                    }, 200);
+                }
+            });
+        }
+
+        setInterval(addInterference, 2000);
+
+        // Efecto de cursor investigativo
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'absolute';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.width = '2px';
+            cursor.style.height = '2px';
+            cursor.style.background = 'rgba(0, 255, 136, 0.5)';
+            cursor.style.borderRadius = '50%';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.zIndex = '1000';
+            document.body.appendChild(cursor);
+            
+            setTimeout(() => {
+                cursor.remove();
+            }, 500);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9905baddb0adc915',t:'MTc2MDc2NjMzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
