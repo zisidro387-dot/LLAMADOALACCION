@@ -2,29 +2,40 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     <title>Los Lenguoides - Investigación</title>
     <style>
-        body {
+        * {
             box-sizing: border-box;
+        }
+
+        body {
             margin: 0;
             padding: 0;
             height: 100%;
+            min-height: 100%;
             font-family: 'Courier New', monospace;
             background: #0a0a0a;
             overflow: hidden;
             cursor: crosshair;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
         }
 
         html {
             height: 100%;
+            min-height: 100%;
         }
 
         .scene-container {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
+            min-height: 100vh;
             background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 70%);
+            overflow: hidden;
         }
 
         /* Investigador principal */
@@ -33,9 +44,17 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 300px;
-            height: 400px;
+            width: min(300px, 40vw);
+            height: min(400px, 50vh);
             z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .investigator {
+                width: 35vw;
+                height: 45vh;
+                bottom: 5vh;
+            }
         }
 
         .investigator-figure {
@@ -83,25 +102,48 @@
         .monitor-1 {
             top: 10%;
             left: 5%;
-            width: 200px;
-            height: 150px;
+            width: min(200px, 25vw);
+            height: min(150px, 18vh);
             animation: flicker 4s infinite;
         }
 
         .monitor-2 {
             top: 20%;
             right: 8%;
-            width: 180px;
-            height: 120px;
+            width: min(180px, 23vw);
+            height: min(120px, 15vh);
             animation: flicker 3s infinite 1s;
         }
 
         .monitor-3 {
             bottom: 15%;
             left: 8%;
-            width: 160px;
-            height: 100px;
+            width: min(160px, 20vw);
+            height: min(100px, 12vh);
             animation: flicker 5s infinite 2s;
+        }
+
+        @media (max-width: 768px) {
+            .monitor-1 {
+                width: 30vw;
+                height: 20vh;
+                top: 8%;
+                left: 3%;
+            }
+
+            .monitor-2 {
+                width: 28vw;
+                height: 18vh;
+                top: 15%;
+                right: 5%;
+            }
+
+            .monitor-3 {
+                width: 25vw;
+                height: 15vh;
+                bottom: 25vh;
+                left: 5%;
+            }
         }
 
         .vhs-static {
@@ -133,11 +175,23 @@
         .hieroglyph {
             position: absolute;
             color: #00ff88;
-            font-size: 24px;
+            font-size: clamp(16px, 4vw, 24px);
             text-shadow: 0 0 10px currentColor;
             animation: float 6s ease-in-out infinite;
             opacity: 0.8;
             font-family: 'Arial Unicode MS', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .hieroglyph {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hieroglyph {
+                font-size: 14px;
+            }
         }
 
         .hieroglyph:nth-child(odd) {
@@ -156,15 +210,40 @@
             bottom: 20px;
             left: 20px;
             right: 20px;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             border: 2px solid #00ff88;
-            padding: 20px;
+            padding: 15px;
             color: #00ff88;
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: clamp(11px, 2.5vw, 14px);
+            line-height: 1.4;
             text-shadow: 0 0 5px currentColor;
             animation: textGlow 3s ease-in-out infinite;
             z-index: 15;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-text {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 12px;
+                font-size: 11px;
+                line-height: 1.3;
+                max-height: 25vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-text {
+                bottom: 5px;
+                left: 8px;
+                right: 8px;
+                padding: 10px;
+                font-size: 10px;
+                max-height: 22vh;
+            }
         }
 
         /* Cables y equipos */
@@ -285,12 +364,28 @@
         }
 
         /* Efectos interactivos */
-        .scene-container:hover .hieroglyph {
+        .scene-container:hover .hieroglyph,
+        .scene-container:active .hieroglyph {
             animation-duration: 3s;
         }
 
-        .scene-container:hover .investigator-figure {
+        .scene-container:hover .investigator-figure,
+        .scene-container:active .investigator-figure {
             box-shadow: 0 0 30px rgba(212, 165, 116, 0.5);
+        }
+
+        /* Optimizaciones para dispositivos táctiles */
+        @media (hover: none) and (pointer: coarse) {
+            body {
+                cursor: default;
+            }
+            
+            .scene-container {
+                -webkit-tap-highlight-color: transparent;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
         }
     </style>
 </head>
@@ -389,24 +484,53 @@
 
         setInterval(addInterference, 2000);
 
-        // Efecto de cursor investigativo
-        document.addEventListener('mousemove', (e) => {
-            const cursor = document.createElement('div');
-            cursor.style.position = 'absolute';
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            cursor.style.width = '2px';
-            cursor.style.height = '2px';
-            cursor.style.background = 'rgba(0, 255, 136, 0.5)';
-            cursor.style.borderRadius = '50%';
-            cursor.style.pointerEvents = 'none';
-            cursor.style.zIndex = '1000';
-            document.body.appendChild(cursor);
+        // Efecto de cursor investigativo (solo en dispositivos con mouse)
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+            document.addEventListener('mousemove', (e) => {
+                const cursor = document.createElement('div');
+                cursor.style.position = 'absolute';
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursor.style.width = '2px';
+                cursor.style.height = '2px';
+                cursor.style.background = 'rgba(0, 255, 136, 0.5)';
+                cursor.style.borderRadius = '50%';
+                cursor.style.pointerEvents = 'none';
+                cursor.style.zIndex = '1000';
+                document.body.appendChild(cursor);
+                
+                setTimeout(() => {
+                    cursor.remove();
+                }, 500);
+            });
+        }
+
+        // Efecto táctil para dispositivos móviles
+        document.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            const ripple = document.createElement('div');
+            ripple.style.position = 'absolute';
+            ripple.style.left = touch.clientX + 'px';
+            ripple.style.top = touch.clientY + 'px';
+            ripple.style.width = '20px';
+            ripple.style.height = '20px';
+            ripple.style.background = 'rgba(0, 255, 136, 0.3)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.zIndex = '1000';
+            ripple.style.transform = 'translate(-50%, -50%) scale(0)';
+            ripple.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
+            document.body.appendChild(ripple);
             
             setTimeout(() => {
-                cursor.remove();
-            }, 500);
+                ripple.style.transform = 'translate(-50%, -50%) scale(3)';
+                ripple.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9905baddb0adc915',t:'MTc2MDc2NjMzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9905d756b73e12d0',t:'MTc2MDc2NzQ5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
