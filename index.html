@@ -293,22 +293,21 @@
         /* Texto principal */
         .main-text {
             position: absolute;
-            bottom: 15px;
+            bottom: 60px;
             left: 15px;
             right: 15px;
             background: 
                 linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(26, 26, 46, 0.9) 100%);
             border: 2px solid #00ff88;
             border-radius: 8px;
-            padding: 16px;
+            padding: 12px;
             color: #00ff88;
-            font-size: clamp(10px, 2.8vw, 13px);
-            line-height: 1.5;
+            font-size: clamp(9px, 2.2vw, 11px);
+            line-height: 1.3;
             text-shadow: 0 0 8px currentColor;
             animation: textGlow 3s ease-in-out infinite;
             z-index: 15;
-            max-height: 18vh;
-            overflow-y: auto;
+            height: auto;
             box-shadow: 
                 0 0 25px rgba(0, 255, 136, 0.3),
                 inset 0 0 15px rgba(0, 0, 0, 0.5);
@@ -317,41 +316,96 @@
 
         @media (max-width: 768px) {
             .main-text {
-                bottom: 8px;
+                bottom: 50px;
                 left: 8px;
                 right: 8px;
-                padding: 12px;
-                font-size: clamp(9px, 3vw, 11px);
-                line-height: 1.4;
-                max-height: 16vh;
+                padding: 10px;
+                font-size: clamp(8px, 2.5vw, 10px);
+                line-height: 1.2;
                 border-radius: 6px;
             }
         }
 
         @media (max-width: 480px) {
             .main-text {
-                bottom: 5px;
+                bottom: 45px;
                 left: 5px;
                 right: 5px;
-                padding: 10px;
-                font-size: clamp(8px, 3.2vw, 10px);
-                line-height: 1.3;
-                max-height: 14vh;
+                padding: 8px;
+                font-size: clamp(7px, 2.8vw, 9px);
+                line-height: 1.1;
                 border-radius: 4px;
             }
         }
 
-        .main-text::-webkit-scrollbar {
-            width: 4px;
+        /* Botón de cambio de texto */
+        .text-button {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: 
+                linear-gradient(135deg, #ff6b35 0%, #d4521f 50%, #ff6b35 100%);
+            border: 2px solid #ff6b35;
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: clamp(9px, 2.5vw, 11px);
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 107, 53, 0.8);
+            cursor: pointer;
+            z-index: 20;
+            box-shadow: 
+                0 0 15px rgba(255, 107, 53, 0.4),
+                inset 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            animation: buttonPulse 2s ease-in-out infinite;
         }
 
-        .main-text::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
+        @media (max-width: 768px) {
+            .text-button {
+                bottom: 10px;
+                padding: 6px 12px;
+                font-size: clamp(8px, 2.8vw, 10px);
+            }
         }
 
-        .main-text::-webkit-scrollbar-thumb {
-            background: rgba(0, 255, 136, 0.5);
-            border-radius: 2px;
+        @media (max-width: 480px) {
+            .text-button {
+                bottom: 8px;
+                padding: 5px 10px;
+                font-size: clamp(7px, 3vw, 9px);
+            }
+        }
+
+        .text-button:hover {
+            background: 
+                linear-gradient(135deg, #ff8c5a 0%, #e6633a 50%, #ff8c5a 100%);
+            box-shadow: 
+                0 0 25px rgba(255, 107, 53, 0.6),
+                inset 0 0 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        .text-button:active {
+            transform: translateX(-50%) scale(0.95);
+            box-shadow: 
+                0 0 10px rgba(255, 107, 53, 0.8),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 15px rgba(255, 107, 53, 0.4),
+                    inset 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 25px rgba(255, 107, 53, 0.6),
+                    inset 0 0 10px rgba(0, 0, 0, 0.3);
+            }
         }
 
         /* Cables y equipos */
@@ -558,11 +612,16 @@
         <div class="dust-particle" style="top: 70%; right: 40%; animation-delay: -3s;"></div>
 
         <!-- Texto principal -->
-        <div class="main-text">
-            <strong>Por eso, tu tarea es clara:</strong> descifrar estas señales, seguir su patrón, descubrir lo que quieren mostrarnos. No es solo un código, no es solo un puzzle: <em>es la clave para conocer la verdad detrás de los Lenguoides</em> y los fragmentos que logramos recuperar.
-            <br><br>
-            Cada símbolo que logres interpretar nos acerca un poco más a comprender los secretos que llevan siglos ocultos, y cada descubrimiento podría cambiar la forma en que vemos lo que nos rodea.
+        <div class="main-text" id="mainText">
+            <strong>SISTEMA DE INVESTIGACIÓN ACTIVADO</strong><br>
+            Analizando fragmentos recuperados... <em>LENGUOID_PROTOCOL</em> detectado.<br>
+            Estado: <span style="color: #ff6b35;">ESPERANDO INSTRUCCIONES</span>
         </div>
+
+        <!-- Botón de cambio de texto -->
+        <button class="text-button" id="textButton" onclick="changeText()">
+            ACTIVAR PROTOCOLO
+        </button>
     </main>
 
     <script>
@@ -645,6 +704,46 @@
                 ripple.remove();
             }, 600);
         });
+
+        // Función para cambiar el texto
+        let textChanged = false;
+        function changeText() {
+            const mainText = document.getElementById('mainText');
+            const button = document.getElementById('textButton');
+            
+            if (!textChanged) {
+                // Cambiar al texto original
+                mainText.innerHTML = `
+                    <strong>Por eso, tu tarea es clara:</strong> descifrar estas señales, seguir su patrón, descubrir lo que quieren mostrarnos. No es solo un código, no es solo un puzzle: <em>es la clave para conocer la verdad detrás de los Lenguoides</em> y los fragmentos que logramos recuperar.
+                    <br><br>
+                    Cada símbolo que logres interpretar nos acerca un poco más a comprender los secretos que llevan siglos ocultos, y cada descubrimiento podría cambiar la forma en que vemos lo que nos rodea.
+                `;
+                button.textContent = 'REINICIAR SISTEMA';
+                textChanged = true;
+                
+                // Efecto de activación
+                mainText.style.animation = 'none';
+                setTimeout(() => {
+                    mainText.style.animation = 'textGlow 3s ease-in-out infinite';
+                }, 10);
+                
+            } else {
+                // Volver al texto inicial
+                mainText.innerHTML = `
+                    <strong>SISTEMA DE INVESTIGACIÓN ACTIVADO</strong><br>
+                    Analizando fragmentos recuperados... <em>LENGUOID_PROTOCOL</em> detectado.<br>
+                    Estado: <span style="color: #ff6b35;">ESPERANDO INSTRUCCIONES</span>
+                `;
+                button.textContent = 'ACTIVAR PROTOCOLO';
+                textChanged = false;
+            }
+            
+            // Efecto visual en el botón
+            button.style.transform = 'translateX(-50%) scale(0.9)';
+            setTimeout(() => {
+                button.style.transform = 'translateX(-50%) scale(1)';
+            }, 150);
+        }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9905debe03d812d0',t:'MTc2MDc2NzgwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990bfdec00f6dccf',t:'MTc2MDgzMTk5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
